@@ -5,6 +5,7 @@
   <br>
   <div>
     <input v-model="newTodo" type="text" placeholder="Add a new task" />
+    <input v-model="newTodoDescription" type="text" placeholder="Task Description" />
     <button @click="addTodo">Add</button>
   </div>
   <br>
@@ -13,7 +14,7 @@
       <div style="border: solid black 2px;">
         <h1>Todo</h1>
       </div>
-      <div style="border: solid black 2px; height: 19.05rem; padding-top: 0.5rem;">
+      <div style="border: solid black 2px; height: 19.55rem;">
         <draggable 
         v-model="todoArray" 
         group="kanban" 
@@ -21,15 +22,19 @@
         @end="drag=false" 
         item-key="id">
           <template #item="{element}">
-            <div style="height: 1.5rem; padding-top: 0.4rem;">
-              <span style="margin-left: 1.5rem;">
+            <div style="height: 2.75rem; padding-top: 0.4rem; border-bottom: solid black 1px;">
+              <span style="margin-left: 1.5rem; border-bottom: solid black 1px; font-weight: bold;">
                 {{element.name}}
               </span>
               <button @click="deleteTask('todoArray', element.id)" style="float: right; background: none; border: none;">
                 <img src="../assets/x-symbol.svg" alt="x-symbol" style="height: 1rem; width: 1rem;">
               </button>
+              <br>
+              <span style="margin-left: 1.5rem;">
+                {{element.description}}
+              </span>
             </div>
-          </template> 
+          </template>
         </draggable>
       </div>
     </div>
@@ -37,7 +42,7 @@
       <div style="border: solid black 2px;">
         <h1>In progress</h1>
       </div>
-      <div style="border: solid black 2px; height: 19.05rem; padding-top: 0.5rem;">
+      <div style="border: solid black 2px; height: 19.55rem;">
         <draggable 
         v-model="inProgressArray" 
         group="kanban" 
@@ -45,13 +50,17 @@
         @end="drag=false" 
         item-key="id">
           <template #item="{element}">
-            <div style="height: 1.5rem; padding-top: 0.4rem;">
-              <span style="margin-left: 1.5rem;">
+            <div style="height: 2.75rem; padding-top: 0.4rem; border-bottom: solid black 1px;">
+              <span style="margin-left: 1.5rem; border-bottom: solid black 1px; font-weight: bold;">
                 {{element.name}}
               </span>
               <button @click="deleteTask('inProgressArray', element.id)" style="float: right; background: none; border: none;">
                 <img src="../assets/x-symbol.svg" alt="x-symbol" style="height: 1rem; width: 1rem;">
               </button>
+              <br>
+              <span style="margin-left: 1.5rem;">
+                {{element.description}}
+              </span>
             </div>
           </template>
         </draggable>
@@ -61,7 +70,7 @@
       <div style="border: solid black 2px;">
         <h1>Finished</h1>
       </div>
-      <div style="border: solid black 2px; height: 19.05rem; padding-top: 0.5rem;">
+      <div style="border: solid black 2px; height: 19.55rem;">
         <draggable 
         v-model="finishedArray" 
         group="kanban" 
@@ -69,13 +78,17 @@
         @end="drag=false" 
         item-key="id">
           <template #item="{element}">
-            <div style="height: 1.5rem; padding-top: 0.4rem;">
-              <span style="margin-left: 1.5rem;">
+            <div style="height: 2.75rem; padding-top: 0.4rem; border-bottom: solid black 1px;">
+              <span style="margin-left: 1.5rem; border-bottom: solid black 1px; font-weight: bold;">
                 {{element.name}}
               </span>
               <button @click="deleteTask('finishedArray', element.id)" style="float: right; background: none; border: none;">
                 <img src="../assets/x-symbol.svg" alt="x-symbol" style="height: 1rem; width: 1rem;">
               </button>
+              <br>
+              <span style="margin-left: 1.5rem;">
+                {{element.description}}
+              </span>
             </div>
           </template>
         </draggable>
@@ -95,20 +108,20 @@ export default {
     return {
       drag: false,
       todoArray: [
-        { id: 1, name: "Extras" },
-        { id: 2, name: "Fix button" },
-        { id: 3, name: "Fix frontpage bug" },
-        { id: 4, name: "Add extra spiff" },
-        { id: 5, name: "Add css" }
+        { id: 1, name: "Extras", description: "Add extra spiff" },
+        { id: 2, name: "Fix button", description: "Jeez, again?" },
+        { id: 3, name: "Fix frontpage bug", description: "Every time..." },
+        { id: 4, name: "Add extra spiff", description: "Needs more panache"  },
+        { id: 5, name: "Add css", description: "We can't have red backgrounds"  }
       ],
       inProgressArray: [
-        { id: 6, name: "Hotfixes" },
-        { id: 7, name: "Increase efficiency of current functionality" },
-        { id: 8, name: "Allow bulk updates" },
+        { id: 6, name: "Hotfixes", description: "Stuff is on fire"  },
+        { id: 7, name: "Increase efficiency of current functionality", description: "Need elbow grease"  },
+        { id: 8, name: "Allow bulk updates", description: "Care package"  },
       ],
       finishedArray: [
-        { id: 9, name: "Integrate components" },
-        { id: 10, name: "Add core functionality" }
+        { id: 9, name: "Integrate components", description: "Hot glue and flex tape"  },
+        { id: 10, name: "Add core functionality", description: "So this is the start button..."  }
       ],
     };
   },
@@ -149,9 +162,11 @@ export default {
         const newTask = {
           id: this.todoArray.length + 1,
           name: this.newTodo.trim(),
+          description: this.newTodoDescription.trim(),
         };
         this.todoArray.push(newTask);
         this.newTodo = ""; // Clear the input field after adding the task
+        this.newTodoDescription = "";
       }
     },
     deleteTask(arrayName, taskId) {
@@ -166,22 +181,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.column {
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  display: inline-block;
-}
-
-.task {
-  margin: 5px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-  cursor: grab;
-}
-</style>
